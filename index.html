@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pastel Glass Calculator</title>
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com/"></script>
+
+  <style>
+    /* Soft blur for glass effect */
+    .glass {
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+    }
+  </style>
+</head>
+
+<body class="bg-gradient-to-br from-pink-200 via-purple-200 to-blue-200 min-h-screen flex items-center justify-center">
+
+  <div class="glass bg-white/30 p-6 rounded-3xl shadow-2xl border border-white/40 w-80">
+
+    <!-- Display -->
+    <div id="display" class="glass bg-white/40 text-right text-gray-700 px-4 py-6 rounded-2xl
+                text-4xl tracking-wide font-light mb-6 overflow-x-auto border border-white/50 shadow-inner">
+      0
+    </div>
+
+    <!-- Buttons -->
+    <div class="grid grid-cols-4 gap-4">
+
+      <!-- Top row -->
+      <button
+        class="py-3 rounded-xl text-gray-700 bg-white/50 hover:bg-white/70 transition shadow-lg border border-white/50"
+        onclick="press('AC')">AC</button>
+      <button
+        class="py-3 rounded-xl text-gray-700 bg-white/50 hover:bg-white/70 transition shadow-lg border border-white/50"
+        onclick="press('C')">C</button>
+      <button
+        class="py-3 rounded-xl text-gray-700 bg-white/50 hover:bg-white/70 transition shadow-lg border border-white/50"
+        onclick="press('%')">%</button>
+      <button class="py-3 rounded-xl text-white bg-pink-400 hover:bg-pink-500 transition shadow-lg"
+        onclick="press('/')">÷</button>
+
+      <!-- Numbers -->
+      <button class="py-3 rounded-xl text-gray-800 bg-white/60 hover:bg-white/80 transition shadow-md"
+        onclick="press('7')">7</button>
+      <button class="py-3 rounded-xl text-gray-800 bg-white/60 hover:bg-white/80 transition shadow-md"
+        onclick="press('8')">8</button>
+      <button class="py-3 rounded-xl text-gray-800 bg-white/60 hover:bg-white/80 transition shadow-md"
+        onclick="press('9')">9</button>
+      <button class="py-3 rounded-xl text-white bg-purple-400 hover:bg-purple-500 transition shadow-lg"
+        onclick="press('*')">×</button>
+
+      <button class="py-3 rounded-xl text-gray-800 bg-white/60 hover:bg-white/80 transition shadow-md"
+        onclick="press('4')">4</button>
+      <button class="py-3 rounded-xl text-gray-800 bg-white/60 hover:bg-white/80 transition shadow-md"
+        onclick="press('5')">5</button>
+      <button class="py-3 rounded-xl text-gray-800 bg-white/60 hover:bg-white/80 transition shadow-md"
+        onclick="press('6')">6</button>
+      <button class="py-3 rounded-xl text-white bg-purple-400 hover:bg-purple-500 transition shadow-lg"
+        onclick="press('-')">−</button>
+
+      <button class="py-3 rounded-xl text-gray-800 bg-white/60 hover:bg-white/80 transition shadow-md"
+        onclick="press('1')">1</button>
+      <button class="py-3 rounded-xl text-gray-800 bg-white/60 hover:bg-white/80 transition shadow-md"
+        onclick="press('2')">2</button>
+      <button class="py-3 rounded-xl text-gray-800 bg-white/60 hover:bg-white/80 transition shadow-md"
+        onclick="press('3')">3</button>
+      <button class="py-3 rounded-xl text-white bg-purple-400 hover:bg-purple-500 transition shadow-lg"
+        onclick="press('+')">+</button>
+
+      <!-- Bottom row -->
+      <button class="col-span-2 py-3 rounded-xl text-gray-800 bg-white/60 hover:bg-white/80 transition shadow-md"
+        onclick="press('0')">0</button>
+      <button class="py-3 rounded-xl text-gray-800 bg-white/60 hover:bg-white/80 transition shadow-md"
+        onclick="press('.')">.</button>
+      <button class="py-3 rounded-xl text-white bg-blue-400 hover:bg-blue-500 transition shadow-lg"
+        onclick="press('=')">=</button>
+    </div>
+  </div>
+  <script>
+    let current = "";
+    let operators = "+-/*%";
+
+    let display = document.getElementById("display")
+    function press(value) {
+      if (value === "AC") {
+        current = "0"
+        display.textContent = current
+        current = ""
+        return
+      }
+      if (value === "=") {
+        let result = eval(current)
+        display.textContent = result
+        current = ""
+        return
+      }
+      if (value === "C") {
+        let new_current = current.slice(0, current.length - 1)
+        if (new_current === "") {
+          new_current = "0"
+        }
+        current = new_current
+        display.textContent = current
+
+        return
+      }
+      // Correct spelling + correct operator string (NO commas)
+
+      
+      current += value
+      display.textContent = current
+      for (let i = 0; i < operators.length; i++) {
+        const element = operators[i];
+
+        // Avoid checking invalid indexes
+        if (current.length < 2) {
+          return;
+        }
+
+        // Check if the last TWO characters are operators
+        if (
+          current[current.length - 1] === element &&
+          operators.includes(current[current.length - 2])
+        ) {
+          // Remove last operator
+          let new_current = current.slice(0, current.length - 1);
+
+          current = new_current;
+          display.textContent = current;
+          return;
+        }
+      }
+    }
+  </script>
+</body>
+</html>
